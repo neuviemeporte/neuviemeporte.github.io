@@ -32,11 +32,11 @@ ninja@dell:451.03$ ls
 ```
 
 At first glance, several categories of files can be recognized:
-    - the single COM file is the main executable of the game
-    - multiple secondary EXE executable files
-    - PIC files for (mostly) stationary graphics, including the pilot roster, mission briefing, etc. but also the cockpit graphics. These seem to be encoded with some form of RLE, perhaps LZW encoding, but I've not cracked the encoding yet
-    - 3D3, 3DG and 3DT files for each of the game scenarios (CE: Central Europe, LB: Libya, ME: Middle East, PG: Persian Gulf, JP: ?). The format and exact purpose of these is also not yet determined, from some casual browsing in the game executables, it looks like 3DG is "grid" and 3DT is "terrain" data, perhaps 3D3 is some model vertex data?
-    - a couple outliers: SPR (sprites? dbicons seems to be the medal etc. icons in the pilot roster, but not sure how different they would be from PIC), BIN, F15LOADR - all to be discovered in the future
+- the single COM file is the main executable of the game
+- multiple secondary EXE executable files
+- PIC files for (mostly) stationary graphics, including the pilot roster, mission briefing, etc. but also the cockpit graphics. These seem to be encoded with some form of RLE, perhaps LZW encoding, but I've not cracked the encoding yet
+- 3D3, 3DG and 3DT files for each of the game scenarios (CE: Central Europe, LB: Libya, ME: Middle East, PG: Persian Gulf, JP: ?). The format and exact purpose of these is also not yet determined, from some casual browsing in the game executables, it looks like 3DG is "grid" and 3DT is "terrain" data, perhaps 3D3 is some model vertex data?
+- a couple outliers: SPR (sprites? dbicons seems to be the medal etc. icons in the pilot roster, but not sure how different they would be from PIC), BIN, F15LOADR - all to be discovered in the future
 
 From the point of view of the initial reverse engineering process, the most interesting files are the executables (COM/EXE). Analyzing these will tell me how the game works, and the purpose and format of the other game files like the mission data. There are quite a few of those at first glance:
 
@@ -123,8 +123,10 @@ ninja@dell:03_test$ xxd egame.exe
 Doing some googling, that signature belongs to the [standard library for the C programming langage](https://en.wikipedia.org/wiki/C_standard_library) shipping with the [Microsoft C Compiler version 5.0 or 5.1](https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B#16-bit_versions). That's good news for the following reasons:
 
 1. The game is implemented in a relatively high-level language that I'm familiar with, and creating the reimplementation will be easier than if it was all done in straight assembly. I can translate code from disassembly to C somewhat mindlessly, and then reason (and experiment) about what it's trying to accomplish on the level of C than assembly.
-2. Some functions in the code will be possible to be identified by IDA as standard C library functions like `strcpy()` or `fopen()`, further eliminating the amount of code that needs to be manually analyzed, and clarifying intent in other places that do. I have generated what are known as IDA FLIRT signatures from the MS C library files, and importing them into IDA was successful - it was able to identify and mark some functions as belonging to the standard library. Yay!
+2. Some functions in the code will be possible to be identified by IDA as standard C library functions like `strcpy()` or `fopen()`, further eliminating the amount of code that needs to be manually analyzed, and clarifying intent in other places that do. 
 3. More definite verification of the fidelity of the reimplementation will be possible - if the code generated from my C reimplementation generates the same code than the game disassembly, then it means the reimplementation is correct.
 4. After the reimplementation is done, it will be easier to port it to a modern system, perhaps just a matter of switching some calls to the MCGA graphics driver to SDL wrapper functions.
+
+I was able to find a copy of MS C 5.1 online and installed it in dosbox. I have generated what are known as IDA FLIRT signatures from the library files that [came with it](https://retrocomputing.stackexchange.com/questions/14993/what-is-the-format-of-the-static-libraries-shipping-with-legacy-microsoft-c-for), and importing them into IDA was successful - it was able to identify and mark some functions as belonging to the standard library - yay! I also found some scanned documentation for both the compiler and the library itself and reading through them has been enlightening in the way that DOS C programs were written, compiled, and debugged back in the day. I have also made myself some wrapper scripts for executing the compiler in the emulator from within a Makefile, so I can easily develop the reimplementation in a modern environment, and build it just by running `make`.
 
 That's enough for an introduction, I will be writing up my findings in more detail in subsequent posts.
