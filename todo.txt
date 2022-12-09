@@ -1,0 +1,3 @@
+f15:
+- discuss f15.com in detail, including obfuscation
+- discussion of overlays
