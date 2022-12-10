@@ -65,13 +65,21 @@ The main game loop consists of running the following executables in sequence - b
 
 This is a good segway into the purpose of the EXEs. Most of them crash/freeze if launched directly, as they need the initialization done in step 1) of F15.COM to work, and some are not actual runnable executables but overlays (more on that later). 
 
+![setup](/images/su_exe.png){: .center-image }
+
 __SU.EXE__: initial setup, asks the user (in text mode) for their machine configuration (and optionally lets them calibrate the joystick), or obtains that configuration from commandline switches. I have disassembled and analyzed most of it and it also sets some values in the shared configuration buffer shared between the other game executables, but because I'm not planning to implement inferior graphics or sound support, I figure it can mostly be ignored. 
 
 __DS.EXE__: I have also disassembled a part of it as far as I can tell, it's purpose is to check if a needed executable exists - this is selected by the '/1', '/2' commandline switch, which is why I think there is a bug because the main game loop never checks for END.EXE but START.EXE when it's about to launch START. If it does not exist, DS.EXE shows a prompt (in graphical mode) to insert the floppy disk. I don't think it contains any copy protection code, as it exits as soon as it determines that the file exists, so I think it's okay to ignore completely in this project.
 
+![start](/images/start_exe.png){: .center-image }
+
 __START.EXE__: shows game credits on the first run, lets you pick a pilot and the mission, does a mission briefing, probably also loads the mission - need to disassemble, analyze and reimplement it for this project. I have some progress on it, but still far from done.
 
-__EGAME.EXE__: the main part of the game, the actual 3d flight engine. Haven't yet touched it yet other than looked around inside.
+![egame](/images/egame_exe.png){: .center-image }
+
+__EGAME.EXE__: the main part of the game, the actual 3d flight engine. Haven't yet touched it yet other than a cursory look around inside. Thinking about all the 3D projection math that will have to be scraped from its disassembly at some point is giving me night terrors. :/
+
+![end](/images/end_exe.png){: .center-image }
 
 __END.EXE__: after the mission ends, it shows the debriefing, and optionally a static image if you crashed, got promoted or relegated to a desk job. Didn't look at any of it yet, but will also need to reimplement for this project.
 
@@ -102,8 +110,11 @@ misc.exe:     MS-DOS executable
 
 The files seem to be relatively small, but the three main ones are compressed. The compression can be undone with either UNLZEXE or UNP under DOS (in the 451.01 release, some of the files where compressed with EXEPACK), and they inflate to the following:
 
+![unp](/images/unp.png){: .center-image }
+
 ```
-ninja@dell:03_test$ du -sh start egame.exe end.exe
+ninja@dell:03_test$ du -sh su.exe start.exe egame.exe end.exe
+20K     su.exe
 48K     start.exe
 168K    egame.exe
 40K     end.exe
@@ -120,13 +131,13 @@ ninja@dell:03_test$ xxd egame.exe
 00022da0: 2c20 4d69 6372 6f73 6f66 7420 436f 7270  , Microsoft Corp
 ```
 
-Doing some googling, that signature belongs to the [standard library for the C programming langage](https://en.wikipedia.org/wiki/C_standard_library) shipping with the [Microsoft C Compiler version 5.0 or 5.1](https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B#16-bit_versions). That's good news for the following reasons:
+Doing some googling, that signature belongs to the [standard library for the C programming langage](https://en.wikipedia.org/wiki/C_standard_library) shipping with the [Microsoft C Compiler version 5.0 or 5.1](https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B#16-bit_versions), which would line up with the game's release year of 1989 (the compilers were released in 1987 and 1988 - seems Microprose was using cutting-edge tools!) . Being able to identify the compiler is good news for the following reasons:
 
 1. The game is implemented in a relatively high-level language that I'm familiar with, and creating the reimplementation will be easier than if it was all done in straight assembly. I can translate code from disassembly to C somewhat mindlessly, and then reason (and experiment) about what it's trying to accomplish on the level of C than assembly.
 2. Some functions in the code will be possible to be identified by IDA as standard C library functions like `strcpy()` or `fopen()`, further eliminating the amount of code that needs to be manually analyzed, and clarifying intent in other places that do. 
 3. More definite verification of the fidelity of the reimplementation will be possible - if the code generated from my C reimplementation generates the same code than the game disassembly, then it means the reimplementation is correct.
 4. After the reimplementation is done, it will be easier to port it to a modern system, perhaps just a matter of switching some calls to the MCGA graphics driver to SDL wrapper functions.
 
-I was able to find a copy of MS C 5.1 online and installed it in dosbox. I have generated what are known as IDA FLIRT signatures from the library files that [came with it](https://retrocomputing.stackexchange.com/questions/14993/what-is-the-format-of-the-static-libraries-shipping-with-legacy-microsoft-c-for), and importing them into IDA was successful - it was able to identify and mark some functions as belonging to the standard library - yay! I also found some scanned documentation for both the compiler and the library itself and reading through them has been enlightening in the way that DOS C programs were written, compiled, and debugged back in the day. I have also made myself some wrapper scripts for executing the compiler in the emulator from within a Makefile, so I can easily develop the reimplementation in a modern environment, and build it just by running `make`.
+I was able to find a copy of MS C 5.1 online and installed it in dosbox. I obtained what are known as IDA [FLIRT](https://hex-rays.com/products/ida/tech/flirt/in_depth/) signatures from the library files that [came with it](https://retrocomputing.stackexchange.com/questions/14993/what-is-the-format-of-the-static-libraries-shipping-with-legacy-microsoft-c-for), and importing them into IDA was successful - it was able to identify and mark some functions as belonging to the standard library - yay! I also found some scanned documentation for both the compiler and the library itself and reading through them has been enlightening in the way that DOS C programs were written, compiled, and debugged back in the day. I have also made myself some wrapper scripts for executing the compiler in the emulator from within a Makefile, so I can easily develop the reimplementation in a modern environment, and build it just by running `make`.
 
 That's enough for an introduction, I will be writing up my findings in more detail in subsequent posts.
