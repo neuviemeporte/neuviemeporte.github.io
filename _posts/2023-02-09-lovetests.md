@@ -12,34 +12,38 @@ The problem I had in that project was that my code was very brittle. I kept comi
 
 I eventually learned about automated tests, and particularly unit testing. It didn't make much sense to me, but seeing I was young and impressionable, I decided to throw myself into it, and implemented a "unit test" for every single "unit" in my code. Seeing as this was C++ software for image processing, I had a lot of classes for doing simple stuff, like coordinates of a point in 2d/3d space:
 
-    // a point in 2d space
-    struct Point2d { 
-        // point coordinates
-        int x, y; 
+{% highlight cpp %}
+// a point in 2d space
+struct Point2d { 
+    // point coordinates
+    int x, y; 
 
-        // constructor, makes a point
-        Point2d(int x, int y) : x(x), y(y) {
-        } 
+    // constructor, makes a point
+    Point2d(int x, int y) : x(x), y(y) {
+    } 
 
-        // custom equality operator for comparing two points
-        bool operator==(const Point2d &arg) { 
-            return x == arg.x && y == arg.y; 
-        } 
+    // custom equality operator for comparing two points
+    bool operator==(const Point2d &arg) { 
+        return x == arg.x && y == arg.y; 
+    } 
 
-        // ... more stuff ...
-    };
+    // ... more stuff ...
+};
+{% endhighlight %}
 
 I learned that I needed unit testing for my code to be super great, and as far as I could understand, a "unit" meant a class for C++ code, so I need to write unit tests for all classes. Well, just watch me! For some reason, I couldn't be bothered to learn Google Test, so I ended up writing my own simple unit test framework, which was a bunch of functions checking a condition and reporting an error if it was not satisfied. But for the sake of this article, let's just pretend I was using GTest.
 
-    TEST_F(Point2dTest, CheckBasics) {
-        Point2d a(1, 2); // make a point
-        ASSERT_EQ(a.x, 1); // check that it has the expected coordinates
-        ASSERT_EQ(a.y, 2);
-        ASSERT_EQ(a, a); // make sure a == a
-    
-        Point2d b(3, 4); // make a different point
-        ASSERT_NE(a, b); // make sure a != b
-    }
+{% highlight cpp %}
+TEST_F(Point2dTest, CheckBasics) {
+    Point2d a(1, 2); // make a point
+    ASSERT_EQ(a.x, 1); // check that it has the expected coordinates
+    ASSERT_EQ(a.y, 2);
+    ASSERT_EQ(a, a); // make sure a == a
+
+    Point2d b(3, 4); // make a different point
+    ASSERT_NE(a, b); // make sure a != b
+}
+{% endhighlight %}
 
 Time to give myself a pat on the back, right?
 
