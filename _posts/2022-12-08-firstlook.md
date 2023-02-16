@@ -67,9 +67,9 @@ This is a good segway into the purpose of the EXEs. Most of them crash/freeze if
 
 ![setup](/images/su_exe.png){: .center-image }
 
-__SU.EXE__: initial setup, asks the user (in text mode) for their machine configuration (and optionally lets them calibrate the joystick), or obtains that configuration from commandline switches. I have disassembled and analyzed most of it and it also sets some values in the shared configuration buffer shared between the other game executables, but because I'm not planning to implement inferior graphics or sound support, I figure it can mostly be ignored. 
+__SU.EXE__: initial setup, asks the user (in text mode) for their machine configuration (and optionally lets them calibrate the joystick), or obtains that configuration from commandline switches. I have disassembled and analyzed most of it and it also sets some values in the configuration buffer that is shared between the other game executables, but because I'm not planning to implement inferior graphics or sound support, I figure it can mostly be ignored. 
 
-__DS.EXE__: I have also disassembled a part of it as far as I can tell, it's purpose is to check if a needed executable exists - this is selected by the '/1', '/2' commandline switch, which is why I think there is a bug because the main game loop never checks for END.EXE but START.EXE when it's about to launch START. If it does not exist, DS.EXE shows a prompt (in graphical mode) to insert the floppy disk. I don't think it contains any copy protection code, as it exits as soon as it determines that the file exists, so I think it's okay to ignore completely in this project.
+__DS.EXE__: I have also disassembled a part of it as far as I can tell, it's purpose is to check if a needed executable exists - this is selected by the '/1', '/2' commandline switch, which is why I think there is a bug because the main game loop never checks for END.EXE but START.EXE when it's about to launch END. If it does not exist, DS.EXE shows a prompt (in graphical mode) to insert the floppy disk. I don't think it contains any copy protection code, as it exits as soon as it determines that the file exists, so I think it's okay to ignore completely in this project.
 
 ![start](/images/start_exe.png){: .center-image }
 
@@ -133,8 +133,8 @@ ninja@dell:03_test$ xxd egame.exe
 
 Doing some googling, that signature belongs to the [standard library for the C programming langage](https://en.wikipedia.org/wiki/C_standard_library) shipping with the [Microsoft C Compiler version 5.0 or 5.1](https://en.wikipedia.org/wiki/Microsoft_Visual_C%2B%2B#16-bit_versions), which would line up with the game's release year of 1989 (the compilers were released in 1987 and 1988 - seems Microprose was using cutting-edge tools!) . Being able to identify the compiler is good news for the following reasons:
 
-1. The game is implemented in a relatively high-level language that I'm familiar with, and creating the reimplementation will be easier than if it was all done in straight assembly. I can translate code from disassembly to C somewhat mindlessly, and then reason (and experiment) about what it's trying to accomplish on the level of C than assembly.
-2. Some functions in the code will be possible to be identified by IDA as standard C library functions like `strcpy()` or `fopen()`, further eliminating the amount of code that needs to be manually analyzed, and clarifying intent in other places that do. 
+1. The game is implemented in a relatively high-level language that I'm familiar with, and creating the reimplementation will be easier than if it was all done in straight assembly. I can translate code from disassembly to C somewhat mindlessly, and then reason (and experiment) about what it's trying to accomplish on the level of C rather than assembly.
+2. Some functions in the code will be possible to be identified by IDA as standard C library functions like `strcpy()` or `fopen()`, limiting the amount of code that needs to be manually analyzed, and clarifying intent in other places that do. 
 3. More definite verification of the fidelity of the reimplementation will be possible - if the code generated from my C reimplementation generates the same code than the game disassembly, then it means the reimplementation is correct.
 4. After the reimplementation is done, it will be easier to port it to a modern system, perhaps just a matter of switching some calls to the MCGA graphics driver to SDL wrapper functions.
 

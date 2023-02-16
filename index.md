@@ -15,6 +15,7 @@ Finally, since I’ve worked in the industry for a number of years, I have some 
 
 ## Posts by subject
 <ul class="mycat-list">
+<li><a class="mypost-link" href="/category/sw-eng">Thoughts on software development</a></li>
 <li><a class="mypost-link" href="/category/f15-se2">Reverse-engineering of F15 SE2</a></li>
 </ul>
 
