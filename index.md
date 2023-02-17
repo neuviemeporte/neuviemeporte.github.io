@@ -11,6 +11,7 @@ Being a software dev, my job is mostly working with C/C++ code for low-level/sys
 
 Finally, since I’ve worked in the industry for a number of years, I have some thoughts on the shape of it, and how plain code writing relates to the bigger picture of software architecture, project/team management and enabling business to release products and make a profit.
 
+Any opinions that I express are my own, and are not related to or endorsed by my employers, past or present.
 ---
 
 ## Posts by subject
