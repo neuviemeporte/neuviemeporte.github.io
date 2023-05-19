@@ -3,6 +3,8 @@ layout: post
 title: Having a first look around F-15 SE2
 category: f15-se2
 ---
+<small>(_This post is part of a [series]({% link category/f15-se2.html %}) on the subject of my hobby project, which is recreating the C source code for the 1989 game [F-15 Strike Eagle II]({% post_url 2022-06-05-origins %}) by reverse engineering the original binaries._)</small>
+
 So, let's see what we're up against, shall we?
 
 The game has two widely available versions: 451.01 and 451.03 - these numbers are advertised when launching the game, when the user is asked for their machine's video and sound capabilities.
