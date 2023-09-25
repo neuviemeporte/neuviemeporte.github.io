@@ -101,7 +101,7 @@ DGROUP GROUP startData,startBss
 ASSUME DS:DGROUP
 {% endhighlight %}
 
-The IDA-generated `assume`s were interfering with this, so I made the script eradicate all of them. Problem solved. 
+The IDA-generated `assume`s were interfering with this, so I disabled them in the options. However, for some reason IDA also changed all references to the data segment with the newly-created BSS segment everywhere, leading to multiple "symbol not defined" from UASM. I didn't want to fiddle with IDA too much, so I just ended up making the script terminate the data segment at the specific offset that is needed, and open a BSS segment there. The script really gives me endless possibilities.
 
 At this point, the executable assembled and was 100% identical to the original. Yay! However, after copying the executable into the game folder, it ran up to the intro screen and froze. WTF? The executable is identical, so why doesn't it work?
 
