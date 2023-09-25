@@ -17,6 +17,15 @@ p {
     width: 60%;
 }
 
+.center-image-narrow
+{
+    margin: 0 auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: block;
+    width: 30%;
+}
+
 .mycat-list {
     list-style: square;
 }
