@@ -11,7 +11,7 @@ Thing is, I can't easily do that. The (let's say "additive") approach I've follo
 
 ![old process](/images/process_old.png){: .center-image-narrow }
 
-This has several downsides. For one, I don't have a runnable version of the game until I'm done reconstructing all (or nearly all) of the functions. The other is that my recreation is not byte-for-byte identical with the original (again, at least not until I'm done rewriting the whole thing), which means I needed to make a [special tool](https://github.com/neuviemeporte/mzretools) to compare instructions, so that I know if the reconstruction is correct or not. It's been working pretty good so far, but having a runnable version which I can instrument with debug statements if necessary, would be a huge advantage. So far, I had not considered it because it semmed an insurmountable task, but can we actually achieve and maintain binary identity through the reconstruction? That would mean changing the approach to a "subtractive" one, where I take a function away from the perfect copy, reconstruct it in C, and put it back in:
+This has several downsides. For one, I don't have a runnable version of the game until I'm done reconstructing all (or nearly all) of the functions. The other is that my recreation is not byte-for-byte identical with the original (again, at least not until I'm done rewriting the whole thing), which means I needed to make a [special tool](https://github.com/neuviemeporte/mzretools) to compare instructions, so that I know if the reconstruction is correct or not. It's been working pretty good so far, but having a runnable version which I can instrument with debug statements if necessary, would be a huge advantage. So far, I had not considered it because it seemed an insurmountable task, but can we actually achieve and maintain binary identity through the reconstruction? That would mean changing the approach to a "subtractive" one, where I take a function away from the perfect copy, reconstruct it in C, and put it back in:
 
 ![new process](/images/process_new.png){: .center-image-narrow }
 
@@ -108,7 +108,7 @@ At this point, the executable assembled and was 100% identical to the original. 
 Up till now, I've been comparing the contents of the `EXEs` so called load module, that is the part that gets placed in memory by the DOS loader in order to run. The executable on disk also has a header, so let's use `mzhdr` from mzretools to take a look at both headers and compare:
 
 <pre>
-ninja@dell:eaglestrike$ ../dostrace/debug/mzhdr ida/start.exe
+ninja@dell:eaglestrike$ ../mzretools/debug/mzhdr ida/start.exe
 --- ida/start.exe MZ header (28 bytes)
         [0x0] signature = 0x5a4d ('MZ')
         [0x2] last_page_size = 0x146 (326 bytes)
@@ -147,6 +147,6 @@ The two leading instructions don't seem to make much sense, but the `sti` fits p
 
 ![timer isr after](/images/timer_after.png){: .center-image }
 
-Fixing that last bit makes all the relocations in the MZ header of the reconstruction match the original, and finally the reconstructed exe file runs perfectly inside the game. It's still not perfect because the MZ header is padded with zeros to 1024 bytes in the reconstruction, while the original clocks in at 624 bytes, but I figured it's of no consequence right now, and can always be addressed later if it keeps bothering me. In any case, achieving this is a significant step forward, but I still need to check whether the binary identity will hold once I start linking in C code.
+Fixing that last bit makes all the relocations in the MZ header of the reconstruction match the original, and finally the reconstructed exe file runs perfectly inside the game. It's still not perfect because the MZ header is padded with zeros to 1024 bytes in the reconstruction, while the original clocks in at 624 bytes, but I figured it's of no consequence right now, and can always be addressed later if it keeps bothering me. In any case, achieving this is a significant step forward, but I still need to check whether the binary identity [will hold once I start linking in C code]({% post_url 2023-10-06-linking %}).
 
 An another problem is that now my executable comes with the MS C runtime library baked in, and I will need to do more investigation to figure out where it starts and ends inside the disassembly so I can remove its code and particularly the data, before I can link the code with the C library again. But both of these will be handled and written up another time.
