@@ -8,6 +8,15 @@ p {
     text-align: justify;
 }
 
+.center-image-wide
+{
+    margin: 0 auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: block;
+    width: 99%;
+}
+
 .center-image
 {
     margin: 0 auto;
@@ -22,7 +31,7 @@ p {
     margin: 0 auto;
     margin-top: 2%;
     margin-bottom: 2%;
-    display: block;
+    display: flex;
     width: 30%;
 }
 
