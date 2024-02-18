@@ -65,7 +65,7 @@ The main game loop consists of running the following executables in sequence - b
 6. END.EXE
 7. Go back to 1
 
-This is a good segway into the purpose of the EXEs. Most of them crash/freeze if launched directly, as they need the initialization done in step 1) of F15.COM to work, and some are not actual runnable executables but overlays (more on that later). 
+This is a good segway into the purpose of the EXEs. Most of them crash/freeze if launched directly, as they need the initialization done in step 1) of F15.COM to work, and some are not actual runnable executables but overlays ([more on that later]({% post_url 2023-07-12-overlays %})).
 
 ![setup](/images/su_exe.png){: .center-image }
 
@@ -85,7 +85,7 @@ __EGAME.EXE__: the main part of the game, the actual 3d flight engine. Haven't y
 
 __END.EXE__: after the mission ends, it shows the debriefing, and optionally a static image if you crashed, got promoted or relegated to a desk job. Didn't look at any of it yet, but will also need to reimplement for this project.
 
-__xGRAPHIC.EXE__: these files are the overlay video driver files for the specific video adapters of the day (EGRAPHIC - [EGA](https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter), CGRAPHIC - [CGA](https://en.wikipedia.org/wiki/Color_Graphics_Adapter)). I will discuss the details of these overlays at a later time, but for this project I will be focusing on the most superior, 256 color [MCGA](https://en.wikipedia.org/wiki/Multi-Color_Graphics_Array) graphics, so I need to analyze and reimplement MGRAPHIC.EXE and ignore the rest. I have some progress on that, but not yet completely done
+__xGRAPHIC.EXE__: these files are the overlay video driver files for the specific video adapters of the day (EGRAPHIC - [EGA](https://en.wikipedia.org/wiki/Enhanced_Graphics_Adapter), CGRAPHIC - [CGA](https://en.wikipedia.org/wiki/Color_Graphics_Adapter)). I will discuss the details of these overlays [at a later time]({% post_url 2023-07-12-overlays %}), but for this project I will be focusing on the most superior, 256 color [MCGA](https://en.wikipedia.org/wiki/Multi-Color_Graphics_Array) graphics, so I need to analyze and reimplement MGRAPHIC.EXE and ignore the rest. I have some progress on that, but not yet completely done.
 
 __xSOUND.EXE__: likewise, driver overlays but for sound. The best this game can do is [Adlib](https://en.wikipedia.org/wiki/Ad_Lib,_Inc.) sound, but because it's mostly a static hiss for the engine sound, some sound effects and a gimmicky speech effect at key mission points, I will be ignoring sound completely, at least for now.
 
@@ -138,7 +138,7 @@ Doing some googling, that signature belongs to the [standard library for the C p
 1. The game is implemented in a relatively high-level language that I'm familiar with, and creating the reimplementation will be easier than if it was all done in straight assembly. I can translate code from disassembly to C somewhat mindlessly, and then reason (and experiment) about what it's trying to accomplish on the level of C rather than assembly.
 2. Some functions in the code will be possible to be identified by IDA as standard C library functions like `strcpy()` or `fopen()`, limiting the amount of code that needs to be manually analyzed, and clarifying intent in other places that do. 
 3. More definite verification of the fidelity of the reimplementation will be possible - if the code generated from my C reimplementation generates the same code than the game disassembly, then it means the reimplementation is correct.
-4. After the reimplementation is done, it will be easier to port it to a modern system, perhaps just a matter of switching some calls to the MCGA graphics driver to SDL wrapper functions.
+4. After the reimplementation is done, it will be easier to port it to a modern system, just need to wrap the direct memory accesses, the far pointer stuff, and rewrite the video driver calls to the MCGA graphics driver into SDL wrapper functions.
 
 I was able to find a copy of MS C 5.1 online and installed it in dosbox. I obtained what are known as IDA [FLIRT](https://hex-rays.com/products/ida/tech/flirt/in_depth/) signatures from the library files that [came with it](https://retrocomputing.stackexchange.com/questions/14993/what-is-the-format-of-the-static-libraries-shipping-with-legacy-microsoft-c-for), and importing them into IDA was successful - it was able to identify and mark some functions as belonging to the standard library - yay! I also found some scanned documentation for both the compiler and the library itself and reading through them has been enlightening in the way that DOS C programs were written, compiled, and debugged back in the day. I have also made myself some wrapper scripts for executing the compiler in the emulator from within a Makefile, so I can easily develop the reimplementation in a modern environment, and build it just by running `make`.
 

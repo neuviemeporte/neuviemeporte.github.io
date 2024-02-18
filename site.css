@@ -8,6 +8,15 @@ p {
     text-align: justify;
 }
 
+.center-image-wide
+{
+    margin: 0 auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: block;
+    width: 99%;
+}
+
 .center-image
 {
     margin: 0 auto;
@@ -15,6 +24,15 @@ p {
     margin-bottom: 2%;
     display: block;
     width: 60%;
+}
+
+.center-image-narrow
+{
+    margin: 0 auto;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: flex;
+    width: 30%;
 }
 
 .mycat-list {
