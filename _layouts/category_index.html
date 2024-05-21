@@ -3,9 +3,10 @@ layout: default
 ---
 <div class="home">
   <h1 class="page-heading">Posts in category : {{ page.category }}</h1>
+  <p>Please note earliest post is at the top - read from the bottom for chronological order</p>
   <ul>
     {% for p in site.categories[page.category] %}
-      <li><a class="mypost-link" href="{{ site.baseurl }}{{ p.url }}">{{ p.title }}</a></li>
+      <li><a class="mypost-link" href="{{ site.baseurl }}{{ p.url }}">{{ p.title }}</a> ({{ p.date | date_to_string: "ordinal" }})</li>
     {% endfor %}
   </ul>
 </div>
