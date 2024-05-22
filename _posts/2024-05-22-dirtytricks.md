@@ -134,4 +134,40 @@ dword_1D650 = ((0x8000 - (long)word_1C82C) << 5) - ((long)((word_1C830 & 0x200) 
 
 Success! Even though I did not request it, the compiler stores the values by itself. My routine completely matches the original at the problematic location, and a couple hundred instructions afterwards. Scratch that off, move to the next one. Whew, that was sneaky!
 
-The takeaway is that stack variables might not really be stack variables when reversing code emitted by these old compilers (and definitely not with the newer ones). It might just be the compiler making a little temporary storage on the side.
+This actually solves a problem a little later on, where I was confused by a write of an 8bit value to what I originally determined to be a 32bit variable (`var_34`) based on the code section we just discussed:
+
+{% highlight nasm %}
+mov	al, wldReadBuf6.field_18[bx]
+mov	byte ptr [bp+var_34], al
+test	byte ptr [bp+var_34], 80h
+{% endhighlight %}
+
+I tried casting the variable to a buffer of `uint8`s, but could not get it to match:
+
+{% highlight cpp %}
+  // ...
+  for (var_26 = 0; var_26 < wldReadBuf5Size - 4; var_26++) { 
+    (uint8*)(&var_34)[0] = wldReadBuf6[var_26].field_18[0]; // ??? Writing a byte to a long?
+    if (((uint8)var_34 & 0x80) != 0) { // written value used in a condition here
+      var_14 = (var_20[0] / 4) * (4 - difficultySaved);
+      if (((uint8)var_34 & 0x40) != 0) { // ...and here
+        var_14 = var_20[0] << 1;
+      }
+      // ...
+{% endhighlight %}
+
+Now, since I know `var_34` is not actually a variable, I just went and removed the variable references and just placed the expression where it's used:
+
+{% highlight cpp %}
+  // ...
+  for (var_26 = 0; var_26 < wldReadBuf5Size - 4; var_26++) {
+    if ((wldReadBuf6[var_26].field_18[0] & 0x80) != 0) {
+      var_14 = (var_20[0] / 4) * (4 - difficultySaved);
+      if ((wldReadBuf6[var_26].field_18[0] & 0x40) != 0) {
+        var_14 = var_20[0] << 1;
+      }
+{% endhighlight %}
+
+This matches. I'm guessing that the compiler figured out that the expression anded with `0x80` was going to be needed for anding with `0x40` later in the loop's body, so it decided to place it on the stack, in the same location where it put the long value before. These are some pretty advanced features for a compiler this old.
+
+Overall, the takeaway is that stack variables might not really be stack variables when reversing code emitted by these old compilers (and even more so with the newer ones). It might just be the compiler making a little temporary storage on the side, so if a variable access looks odd or impossible, maybe just try getting rid of the variable completely and see what happens.
