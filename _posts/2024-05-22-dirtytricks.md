@@ -1,7 +1,7 @@
 ---
 layout: post
 title: The compiler has dirty tricks
-date: 2024-05-05
+date: 2024-05-22
 category: f15-se2
 ---
 
@@ -133,3 +133,5 @@ dword_1D650 = ((0x8000 - (long)word_1C82C) << 5) - ((long)((word_1C830 & 0x200) 
 {% endhighlight %}
 
 Success! Even though I did not request it, the compiler stores the values by itself. My routine completely matches the original at the problematic location, and a couple hundred instructions afterwards. Scratch that off, move to the next one. Whew, that was sneaky!
+
+The takeaway is that stack variables might not really be stack variables when reversing code emitted by these old compilers (and definitely not with the newer ones). It might just be the compiler making a little temporary storage on the side.
