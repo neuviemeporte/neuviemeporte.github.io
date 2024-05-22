@@ -13,7 +13,7 @@ Not having a computer science background, I was never good at this stuff, so thi
 
 In any case, that test had a bunch of rules that I considered incredibly stupid back then. You could pick a language; C++, Java or Python if memory serves. But for C++ you could not use STL, some standard library routines were likewise prohibited (only they didn't tell you which). You were expected to allocate your memory statically and solve everything with arrays. Which probably made sense if you were to be graded on performance (dynamic allocations will always have more overhead). Also, if a part of the task was e.g. to implement a queue, it would hardly make sense to let people use `queue<T>` and call it a day, would it?
 
-But the thing was, the whole thing, like so much at that company, was held together with ducttape and bubble gum. Your source code was parsed before being passed to the compiler, but the parser was very primitive. If it detected a verboten keyword, routine or anything really, it would silently fail the compilation, without telling you why, and on which line the problem was. If you had written a big chunk of code, the only way to figure it out was to keep deleting lines and trying if it would compile. I cannot tell you how much time I wasted trying to spot a variable called `connectedNodes`, because the parser thought I was trying to `connect()` out of my sandbox. Yes, it didn't even bother to check word boundaries, it just scanned the whole thing against a list of patterns, apparently.
+But the thing was, that whole environment was held together with ducttape and bubble gum. Your source code was parsed before being passed to the compiler, but the parser was very primitive. If it detected a verboten keyword, routine or anything really, it would silently fail the compilation, without telling you why, and on which line the problem was. If you had written a big chunk of code, the only way to figure it out was to keep deleting lines and trying if it would compile. I cannot tell you how much time I wasted trying to spot a variable called `connectedNodes`, because the parser thought I was trying to `connect()` out of my sandbox. Yes, it didn't even bother to check word boundaries, it just scanned the whole thing against a list of patterns, apparently.
 
 Ever the defiant one, I decided to play dirty:
 
@@ -118,7 +118,7 @@ ERROR: Instruction mismatch in routine sub_14093 at 1000:46bd/0146bd: mov cx, [s
 
 It writes `dx:ax` to var_34 as soon as it's done calculating the value. There does not appear to be a way to have the cake and eat it too. 
 
-I spent two days trying to rewrite the expression in as many ways as possible. For a while, abusing the seldom used behaviour of the comma operator in C could be the golden ticket:
+I spent two days trying to rewrite the expression in as many ways as possible. For a while, I thought abusing the seldom used behaviour of the comma operator in C could be the golden ticket:
 
 {% highlight cpp %}
 var_34 = (var_30 = 0x8000 - (long)word_1C82C), (long)((word_1C830 & 0x200) ? 0 : 0x708);
