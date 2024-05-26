@@ -15,9 +15,21 @@
 	// 	],
 	// 	"description": "Log output to console"
 	// }
-	"post url": {
+	"post": {
 		"scope": "markdown",
 		"prefix": "post",
+		"body": [
+			"---",
+			"layout: post",
+			"title: $1",
+			"date: $CURRENT_YEAR-$CURRENT_MONTH-$CURRENT_DATE",
+			"category: f15-se2",
+			"---"
+		]
+	}
+	"post url": {
+		"scope": "markdown",
+		"prefix": "purl",
 		"body": "[$1]({% post_url $2 %})"
 	},
 	"C++ highlight": {
@@ -37,5 +49,14 @@
 			"$1",
 			"{% endhighlight %}"
 		]
-	}	
+	},
+	"preformatted": {
+		"scope": "markdown",
+		"prefix": "pre",
+		"body": [
+			"<pre>",
+			"</pre>"
+		]
+	}
+
 }
