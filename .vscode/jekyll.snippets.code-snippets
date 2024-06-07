@@ -57,6 +57,11 @@
 			"<pre>",
 			"</pre>"
 		]
+	},
+	"image": {
+		"scope": "markdown",
+		"prefix": "img",
+		"body": "![$1](/images/$2){: .center-image }"
 	}
 
 }
