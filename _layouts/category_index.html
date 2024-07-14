@@ -3,6 +3,9 @@ layout: default
 ---
 <div class="home">
   <h1 class="page-heading">Posts in category : {{ page.category }}</h1>
+  {% if page.category == "f15-se2" %}
+  <p>The reconstructed <a href="https://github.com/neuviemeporte/f15se2-re">source code</a> for F15-II is now publically available (as a work-in-progress).</p>
+  {% endif %}
   <p>Please note earliest post is at the top - read from the bottom for chronological order</p>
   <ul>
     {% for p in site.categories[page.category] %}
