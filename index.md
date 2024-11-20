@@ -19,6 +19,7 @@ Any opinions that I express are my own, and are not related to or endorsed by my
 <ul class="mycat-list">
 <li><a class="mypost-link" href="/category/sw-eng">Thoughts on software development</a></li>
 <li><a class="mypost-link" href="/category/f15-se2">Reverse-engineering of F15 SE2</a></li>
+<li><a class="mypost-link" href="/category/other">Other</a></li>
 </ul>
 
 ---

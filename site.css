@@ -8,6 +8,19 @@ p {
     text-align: justify;
 }
 
+.imgcaption {
+    border: 0px;
+    > table, td, th, thead {
+        color: lightgray;
+        background-color: #191B1C;
+        padding: 0px;
+        border: 0px;
+    }
+    > img {
+        margin: 0px;
+    }
+}
+
 .center-image-wide
 {
     margin: 0 auto;
