@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Improvements in tooling
-category: other
+category: f15-se2
 ---
 <small>(_This post is part of a [series]({% link category/f15-se2.html %}) on the subject of my hobby project, which is recreating the C source code for the 1989 game [F-15 Strike Eagle II]({% post_url 2022-06-05-origins %}) by reverse engineering the original binaries._)</small>
 
@@ -29,7 +29,7 @@ The other big improvement came from a [bug report](https://github.com/neuviemepo
 
 I can't really avoid this in a tool which is just a static code walker. The instruction preceeding the data block is a function call, which probably doesn't return in the real world, so the CPU never goes into the data (or maybe the "data" is rewritten with legitimate code at runtime), but my tool has no way of knowing that. So what I did is change the assertion into an exception that is caught it the comparison loop. If it finds an invalid instruction, it will "rollback", or mark the entire block from the location the instruction scanning started at as "bad", then continue with the next location as if nothing happened. I'm happy to say this works pretty well and is going to vastly increase the range of games the tool can work with.
 
-To make the rollback a little less rough on the outcome, I also increased the scan granularity, i.e. made the scan blocks smaller, so that in case of a rollback, it will not mark an entire routine as bad, which could be perfectly fine. Until now, I would scan an entire routine, until I encountered an unconditional jump or a return. Now, every branch, including conditional jumps and calls incurs a scan break, with the destination past the branch added to the search queue separately, as a separate block of the routine.
+To make the rollback a little less rough on the outcome, I also increased the scan granularity, i.e. made the scan blocks smaller, so that in case of a rollback, it will not mark an entire routine as bad, which could be perfectly fine. Until now, I would scan an entire routine, until I encountered an unconditional jump or a return. Now, every branch, including conditional jumps and calls incurs a scan break, with the destination past the branch added to the search queue as a separate block of the routine.
 
 # Boring bugfixes
 
