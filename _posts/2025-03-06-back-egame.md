@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Back in the (e)game
-date: 2025-03-07
+date: 2025-03-06
 category: f15-se2
 ---
 <small>(_This post is part of a [series]({% link category/f15-se2.html %}) on the subject of my hobby project, which is recreating the C source code for the 1989 game [F-15 Strike Eagle II]({% post_url 2022-06-05-origins %}) by reverse engineering the original binaries._)</small>
