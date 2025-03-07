@@ -6,7 +6,7 @@ category: f15-se2
 ---
 <small>(_This post is part of a [series]({% link category/f15-se2.html %}) on the subject of my hobby project, which is recreating the C source code for the 1989 game [F-15 Strike Eagle II]({% post_url 2022-06-05-origins %}) by reverse engineering the original binaries._)</small>
 
-This is just a short status update to let anybody interested know that after spending [too]({% post_url 2024-12-31-newtooling %}) [much]({% post_url 2025-01-30-newtooling2 %}) time on improvements and bugfixes for my tooling, I'm back to reconstructing the actual game, finally branching into the next executable (`EGAME.EXE`) since the previous one is [mostly working]({% post_url 2025-01-09-start-runs %}). In fact, I just finished reconstructing the `main()` routine, so I guess this is cause to celebrate. Yay!
+This is just a short status update to let anybody interested know that after spending [too]({% post_url 2024-12-31-newtooling %}) [much]({% post_url 2025-01-30-newtooling2 %}) time on improvements and bugfixes for my tooling, I'm back to reconstructing the actual game, finally branching into the next executable (`EGAME.EXE`) since the previous one is [mostly working]({% post_url 2025-01-09-start-runs %}). In fact, I just finished [reconstructing the `main()` routine](https://github.com/neuviemeporte/f15se2-re/blob/main/src/egame0.c), so I guess this is cause to celebrate. Yay!
 
 Part of the reason this took so long is the fact I was procrastinating because setting up a new executable with my tooling is a bit of a chore. What I basically did was:
 
