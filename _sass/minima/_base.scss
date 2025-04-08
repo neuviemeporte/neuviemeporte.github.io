@@ -263,7 +263,10 @@ table {
 table {
   background-color: #1e1e1e !important;
   border-collapse: collapse;
-  width: 100%;
+  width: auto; /* no more full width */
+  max-width: 100%; /* prevents overflow */
+  margin: 1em 0; /* left-align the table */
+  font-size: 0.9em; /* smaller font size */  
   color: #e0e0e0;
 }
 
@@ -271,7 +274,8 @@ table th,
 table td {
   background-color: #2a2a2a !important;
   border: 1px solid #444;
-  padding: 8px;
+  padding: 6px 10px; /* slightly smaller padding */
+  white-space: nowrap; /* prevents wrapping inside cells */  
 }
 
 table th {
