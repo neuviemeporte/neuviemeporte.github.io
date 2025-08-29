@@ -142,7 +142,7 @@ Another neat thing to see is how the references form arrays of pointers at some 
 
 # Conclusion
 
-Admittedly, the results are not groundbreaking, but this was something that I just needed to check out of curiosity. I was unable to fix the remaining bugs in `START` this way either, so it means it's up for a new round of debugging in the near future. Anyway, I think this work will pay dividens in the future because:
+Admittedly, the results are not groundbreaking, but this was something that I just needed to check out of curiosity. I was unable to fix the remaining bugs in `START` this way either, so it means it's up for a new round of debugging in the near future. Anyway, I think this work will pay dividends in the future because:
 
 1. I expect `END.EXE` (the debriefing stage which mostly just shows static images) to be more similar to `START` than `EGAME` is, so I expect to find a fair amount of duplication there,
 2. I will need to find pointers in both `EGAME` and `END`, so `mzptr` will see its share of work (once I can get the data segment discovery to work),
