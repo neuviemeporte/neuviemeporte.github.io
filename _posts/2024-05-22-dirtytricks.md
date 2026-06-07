@@ -25,7 +25,7 @@ Ever the defiant one, I decided to play dirty:
 
 Unsurprisingly, this worked and now I could use the forbidden fruit of STL containers in the test. Yay. If I were more black-hat inclined, I could probably find interesting ways to abuse the system and bring down the Matrix, but I could never be bothered. I just showed it to a bunch of colleagues and we shared a laugh. One commented giddily: "sneaky, sneaky!".
 
-Well, this painfully protracted intro finally brings us to the matter at hand, which is reversing F-15. When I stumbled onto the soultion of this puzzle, that exact line came through my head. But let's start at the beginning. I'm currently tweaking a long routine, already translated from disassembly to C, into identical opcodes when compared with the original. After a string of successes, `mzdiff` stops again on this bit of code:
+Well, this painfully protracted intro finally brings us to the matter at hand, which is reversing F-15. When I stumbled onto the solution of this puzzle, that exact line came through my head. But let's start at the beginning. I'm currently tweaking a long routine, already translated from disassembly to C, into identical opcodes when compared with the original. After a string of successes, `mzdiff` stops again on this bit of code:
 
 {% highlight nasm %}
 		test	word_1C830, 200h
@@ -85,7 +85,7 @@ I have already figured out the arithmetic [in a previous post]({% post_url 2024-
 4. The value of var_34 is stored in its variable
 5. The value of var_30 is read back for shifting, subtraction and storage in the destination
 
-Particularly, there does not appear to be a way (in the C programming language) to force a delay of the store in 4) until after the calculation result of 2) is stored in 3). You write a statement to calculate something and where to place the result, and it's done immediately (modern compilers may very well do crazy reoderding, but we are living in 1989 here). You cannot say `x = y + 5... but write to x a little later please`. So this looks like some quirky compiler behaviour due to needing to juggle the limited register storage to perform the requested calculation.
+Particularly, there does not appear to be a way (in the C programming language) to force a delay of the store in 4) until after the calculation result of 2) is stored in 3). You write a statement to calculate something and where to place the result, and it's done immediately (modern compilers may very well do crazy reordering, but we are living in 1989 here). You cannot say `x = y + 5... but write to x a little later please`. So this looks like some quirky compiler behaviour due to needing to juggle the limited register storage to perform the requested calculation.
 
 Also, that the values are stored in the middle of the calculation smells of the "assignment as subexpression" idiom (`a = (b = c + d)`) that I've seen used heavily throughout the reconstructed code. So how about this?
 
@@ -126,7 +126,7 @@ var_34 = (var_30 = 0x8000 - (long)word_1C82C), (long)((word_1C830 & 0x200) ? 0 :
 
 This evaluates the expressions from left to right, and yields the value of the last expression as the result. However, in this case actually the left-to-right order is observed, and var_30 really is evaluated first (which is the way I wrote it, but hoped the compiler would reorder it). So again, no dice.
 
-This had me puzzled and out of ideas. Looking at the sequence of the instructions, it seemed like the compiler decided to dump `dx:ax` onto the stack because it needed them to do arithmetic in the shifting loop (It seems to prefer those for 32bit arithmetic, idk). So maybe this is not a store that the programmer wanted at all? Maybe the compiler just figured it needed a place to put the intermediate results, and decided on the stack behind my back? I remove the two impossibile stores:
+This had me puzzled and out of ideas. Looking at the sequence of the instructions, it seemed like the compiler decided to dump `dx:ax` onto the stack because it needed them to do arithmetic in the shifting loop (It seems to prefer those for 32bit arithmetic, idk). So maybe this is not a store that the programmer wanted at all? Maybe the compiler just figured it needed a place to put the intermediate results, and decided on the stack behind my back? I remove the two impossible stores:
 
 {% highlight cpp %}
 dword_1D650 = ((0x8000 - (long)word_1C82C) << 5) - ((long)((word_1C830 & 0x200) ? 0 : 0x708));
