@@ -18,7 +18,7 @@ One of them however stands out from the others, because I played it the most, an
 
 As I got older, there came better games, including flight sims, and of course I played them, but figuring out the complex avionics implemented in [DCS](https://en.wikipedia.org/wiki/Digital_Combat_Simulator) is not something I just have the time for. I had a lot of fun with [F-22 TAW](https://en.wikipedia.org/wiki/F-22_Total_Air_War), but for some reason F-15 II just stuck with me over the years.
 
-Now the other thing that was happening over the years is that I was learning about programming and the way computers worked in general. Starting back at primary school, I got my feet wet with some simple [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) programs, later moved on to C and C++ and ultimately ended up as a professional software dev. At some point, I became drawn to my origins and wanted to understand better how DOS and the [x86](https://en.wikipedia.org/wiki/X86) processors worked under the hood.
+Meanwhile, the other thing that was happening is that I was learning about programming and the way computers worked in general. Starting back at primary school, I got my feet wet with some simple [Pascal](https://en.wikipedia.org/wiki/Pascal_(programming_language)) programs, later moved on to C and C++ and ultimately ended up as a professional software dev. At some point, I became drawn to my origins and wanted to understand better how DOS and the [x86](https://en.wikipedia.org/wiki/X86) CPUs worked under the hood.
 
 I guess it would be inevitable that I would end up applying the knowledge I had gathered to F15, because I recall that in high school, after learning the basics of x86 [assembly](https://en.wikipedia.org/wiki/Assembly_language) programming, I ended up disassembling F15's game binary, printing out the listing on my inkjet printer and poring over it, hoping to glean some insights into how the game worked. I sadly lacked the knowledge back then, but I've been working at it, and I think I'm now in a place where I can undertake a project to [reverse](https://en.wikipedia.org/wiki/Reverse_engineering) it and write a reimplementation in a high-level language, which can later be studied, expanded and improved.
 
@@ -29,7 +29,7 @@ I plan to document my project here for the sake of anybody who might be interest
 Some project goals:
 * aiming at a faithful, bug-for-bug reimplementation of the original engine, then porting it to a modern platform to be further tweaked, not looking to do a remake.
 * compatibility with original game assets (world maps, plane models, sprites etc.), hence requiring reverse-engineering the custom formats used.
-* clean reversing project, hence I will not be releasing any copyrighted materials such as game binaries or disassembly listings, only the clean source code when it's done.
+* clean reversing project, hence I will not be releasing any copyrighted materials such as game binaries or disassembly listings, only the source code when it's done.
 
 Now let's get to it.
 
